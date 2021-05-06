@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/auth");
+
 
 //REGISTER
 router.post("/register", async (req, res) => {
@@ -16,12 +18,22 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
+  //token generation and save in cookies
+  // const token = await newUser.generateAuthToken();
+  // res.cookies("jwt", token, {
+  //   expires: new Date(Date.now() + 60000),
+  //   httpOnly: true
+  // });
+
     //save user and respond
     const user = await newUser.save();
+    console.log("page " + user);
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err)
   }
+
+  
 });
 
 //LOGIN
@@ -33,10 +45,37 @@ router.post("/login", async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.password, user.password)
     !validPassword && res.status(400).json("wrong password")
 
+    // const token = await newUser.generateAuthToken();
+    // res.cookies("jwt", token, {
+    //   expires: new Date(Date.now() + 60000),
+    //   httpOnly: true
+    // });
+
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json(err)
   }
 });
+
+
+//LOGOUT
+// router.post("/logout", auth, async (req, res) => {
+//   try {
+//     res.clearCookie("jwt");
+//     await req.user.save();
+//     res.render("login");
+//   } catch (err) {
+//     res.status(500).json(err)
+//   }
+// });
+router.post("/logout", async (req, res) => {
+  try {
+
+    res.render("login");
+  } catch (err) {
+    res.status(500).json(err)
+  }
+});
+
 
 module.exports = router;

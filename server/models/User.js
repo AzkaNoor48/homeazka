@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -48,6 +49,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       max: 50,
     },
+    tokens:[{
+      token:{
+        type: String,
+        require: true
+      }
+    }],
     from: {
       type: String,
       max: 50,
@@ -60,4 +67,18 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.methods.generateAuthToken=async function(){
+  try{
+ 
+      const  token=await jwt.sign({_id:this._id.toString()},"Thisissocialmedianetworkapp");
+     this.tokens=this.tokens.concat({token:token})
+      const userVerify= await jwt.verify();
+      await this.save();
+    return token;
+      
+  }
+  catch(err){
+
+  }
+} 
 module.exports = mongoose.model("User", UserSchema);

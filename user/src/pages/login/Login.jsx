@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import "./login.css";
 import { loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
-import { CircularProgress } from "@material-ui/core";
+import { Link } from 'react-router-dom'
 
 export default function Login() {
   const email = useRef();
@@ -18,49 +18,36 @@ export default function Login() {
   };
 
   return (
-    <div className="login">
-      <div className="loginWrapper">
-        <div className="loginLeft">
-          <h3 className="loginLogo">Lamasocial</h3>
-          <span className="loginDesc">
-            Connect with friends and the world around you on Lamasocial.
-          </span>
-        </div>
-        <div className="loginRight">
-          <form className="loginBox" onSubmit={handleClick}>
-            <input
-              placeholder="Email"
-              type="email"
-              required
-              className="loginInput"
-              ref={email}
-            />
-            <input
-              placeholder="Password"
-              type="password"
-              required
-              minLength="6"
-              className="loginInput"
-              ref={password}
-            />
-            <button className="loginButton" type="submit" disabled={isFetching}>
-              {isFetching ? (
-                <CircularProgress color="white" size="20px" />
-              ) : (
-                "Log In"
-              )}
-            </button>
-            <span className="loginForgot">Forgot Password?</span>
-            <button className="loginRegisterButton">
-              {isFetching ? (
-                <CircularProgress color="white" size="20px" />
-              ) : (
-                "Create a New Account"
-              )}
-            </button>
-          </form>
-        </div>
+    <div className="wrapper">
+    <div className="inner">
+      <div className="image-holder">
+        <img src="assets/registration-form-4.jpg" height="450px" alt="" />
       </div>
+      <form onSubmit={handleClick}>
+        <h3>Sign In</h3>
+        <div className="form-holder active">
+          <input type="text" placeholder="e-mail" className="form-control" id="email"
+                ref={email} name="email" />
+        </div>
+        <div className="form-holder">
+          <input type="password" placeholder="Password" className="form-control" style={{fontSize: '15px'}} 
+             id="password" ref={password} name="password" 
+          />
+        </div>
+        <div className="row">
+        <button  type="submit" >
+            Login
+            </button>
+           
+           
+                <Link to="/forgot_password">Forgot your password?</Link>
+            </div>
+        <div className="form-login">
+          
+          <p>Don't Have an Account? <Link to="/register">Signup</Link></p>
+        </div>
+      </form>
     </div>
+  </div>
   );
 }

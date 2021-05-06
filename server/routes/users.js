@@ -1,9 +1,10 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/auth");
 
 //update user
-router.put("/:id", async (req, res) => {
+router.put("/:id",async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     if (req.body.password) {
       try {
